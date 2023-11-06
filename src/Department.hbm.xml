@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Mapping.Department" table="department" schema="classmanagement">
+        <id name="id">
+            <column name="ID" sql-type="int"/>
+        </id>
+        <property name="name">
+            <column name="Name" sql-type="varchar(50)" length="50" not-null="true"/>
+        </property>
+        <property name="building">
+            <column name="Building" sql-type="varchar(45)" length="45" not-null="true"/>
+        </property>
+        <set name="professorsById" inverse="true">
+            <key>
+                <column name="DepartmentID"/>
+            </key>
+            <one-to-many not-found="ignore" class="Mapping.Professor"/>
+        </set>
+        <set name="roomsById" inverse="true">
+            <key>
+                <column name="Building"/>
+            </key>
+            <one-to-many not-found="ignore" class="Mapping.Room"/>
+        </set>
+        <set name="studentsById" inverse="true">
+            <key>
+                <column name="DepartmentID"/>
+            </key>
+            <one-to-many not-found="ignore" class="Mapping.Student"/>
+        </set>
+    </class>
+</hibernate-mapping>

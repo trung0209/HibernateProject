@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Mapping.Section" table="section" schema="classmanagement">
+        <id name="id">
+            <column name="id" sql-type="int"/>
+        </id>
+        <property name="courseid">
+            <column name="courseid" sql-type="varchar(20)" length="20"/>
+        </property>
+        <property name="roomName">
+            <column name="Room_name" sql-type="varchar(45)" length="45"/>
+        </property>
+        <property name="start">
+            <column name="start" sql-type="time"/>
+        </property>
+        <property name="end">
+            <column name="end" sql-type="time"/>
+        </property>
+        <property name="day">
+            <column name="Day" sql-type="varchar(50)" length="50"/>
+        </property>
+        <many-to-one name="roomByRoomName" class="Mapping.Room">
+            <column name="Room_name"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Mapping.Professor" table="professor" schema="classmanagement">
+        <id name="id">
+            <column name="ID" sql-type="varchar(20)" length="20"/>
+        </id>
+        <property name="departmentId">
+            <column name="DepartmentID" sql-type="int"/>
+        </property>
+        <property name="name">
+            <column name="Name" sql-type="varchar(100)" length="100"/>
+        </property>
+        <property name="email">
+            <column name="Email" sql-type="varchar(100)" length="100" not-null="true"/>
+        </property>
+        <property name="phone">
+            <column name="Phone" sql-type="varchar(45)" length="45" not-null="true"/>
+        </property>
+        <many-to-one name="departmentByProfessor" class="Mapping.Department">
+            <column name="DepartmentID"/>
+        </many-to-one>
+        <one-to-one name="logininfoById" class="Mapping.Logininfo"/>
+        <set name="coursesById" inverse="true">
+            <key>
+                <column name="Professor_ID"/>
+            </key>
+            <one-to-many not-found="ignore" class="Mapping.Course"/>
+        </set>
+    </class>
+</hibernate-mapping>

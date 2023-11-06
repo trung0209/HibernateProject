@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="756.0"
+         prefWidth="908.0" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="200.0" tabMinWidth="100.0"
+         xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="ControllerFile.LoginMenuController">
+    <tabs>
+        <Tab fx:id="LoginTab" text="Login">
+            <content>
+                <AnchorPane prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Accordion layoutX="58.0" layoutY="143.0"/>
+                        <VBox layoutX="279.0" layoutY="223.0" prefHeight="200.0" prefWidth="351.0">
+                            <children>
+                                <Label text="ID:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="IdField">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="21.0" prefWidth="97.0" text="Password:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <PasswordField fx:id="PasswordField">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </PasswordField>
+                                <Label fx:id="StatusLable" alignment="CENTER" prefHeight="51.0" prefWidth="386.0"/>
+                                <Button mnemonicParsing="false" onAction="#LoginConfirm" prefHeight="30.0"
+                                        prefWidth="120.0" text="Login"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="RegisterTab" text="Register Professor">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="878.0">
+                    <children>
+                        <VBox layoutX="103.0" layoutY="31.0" prefHeight="200.0" prefWidth="351.0">
+                            <children>
+                                <Label text="ID:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="IdRegister">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="21.0" prefWidth="97.0" text="Password:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <PasswordField fx:id="PasswordRegister">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </PasswordField>
+                                <Label layoutX="10.0" layoutY="84.0" prefHeight="30.0" prefWidth="172.0"
+                                       text="ConfirmPassword:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <PasswordField fx:id="ConfirmPass" layoutX="10.0" layoutY="114.0">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </PasswordField>
+                                <Label text="Name">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="NameRegister" layoutX="10.0" layoutY="40.0">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="30.0" prefWidth="82.0" text="Email">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="ProfessorEmail">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="30.0" prefWidth="82.0" text="Phone">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="ProfessorPhone">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="30.0" prefWidth="130.0" text="Department">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <ComboBox fx:id="listDept" prefHeight="31.0" prefWidth="209.0"/>
+                            </children>
+                        </VBox>
+                        <Button layoutX="624.0" layoutY="212.0" mnemonicParsing="false" onAction="#RegisterProfessor"
+                                prefHeight="30.0" prefWidth="120.0" text="Register"/>
+                        <Label fx:id="StatusLable2" alignment="CENTER" layoutX="506.0" layoutY="134.0" prefHeight="51.0"
+                               prefWidth="357.0">
+                            <font>
+                                <Font size="23.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="RegisterTab2" text="Register Student">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <VBox layoutX="100.0" layoutY="14.0" prefHeight="200.0" prefWidth="351.0">
+                            <children>
+                                <Label text="ID:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="StudentId">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="21.0" prefWidth="97.0" text="Password:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <PasswordField fx:id="StudentPass">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </PasswordField>
+                                <Label layoutX="10.0" layoutY="84.0" prefHeight="30.0" prefWidth="172.0"
+                                       text="ConfirmPassword:">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <PasswordField fx:id="ConfirmPass2" layoutX="10.0" layoutY="114.0">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </PasswordField>
+                                <Label text="Name">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="StudentName" layoutX="10.0" layoutY="40.0">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="30.0" prefWidth="82.0" text="Email">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="StudentEmail">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="30.0" prefWidth="82.0" text="Phone">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <TextField fx:id="StudentPhone">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                                <Label prefHeight="30.0" prefWidth="130.0" text="Department">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Label>
+                                <ComboBox fx:id="listDept1" prefHeight="31.0" prefWidth="209.0"/>
+                            </children>
+                        </VBox>
+                        <Label layoutX="100.0" layoutY="541.0" prefHeight="30.0" prefWidth="130.0" text="Date of Birth">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
+                        <TextField fx:id="dateInputStudent" layoutX="100.0" layoutY="578.0" promptText="YYYY/MM/DD">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </TextField>
+                        <Label fx:id="StatusLable3" alignment="CENTER" layoutX="524.0" layoutY="110.0" prefHeight="51.0"
+                               prefWidth="357.0">
+                            <font>
+                                <Font size="23.0"/>
+                            </font>
+                        </Label>
+                        <Button layoutX="643.0" layoutY="174.0" mnemonicParsing="false" onAction="#RegisterStudent"
+                                prefHeight="30.0" prefWidth="120.0" text="Register"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

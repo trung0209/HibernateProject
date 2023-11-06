@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Mapping.Weight" table="weight" schema="classmanagement">
+        <id name="course">
+            <column name="course" sql-type="varchar(20)" length="20"/>
+        </id>
+        <property name="weightMid">
+            <column name="WeightMid" sql-type="float unsigned" precision="-1" not-null="true"/>
+        </property>
+        <property name="weightFinal">
+            <column name="WeightFinal" sql-type="float unsigned" precision="-1" not-null="true"/>
+        </property>
+        <property name="weightAssignment">
+            <column name="WeightAssignment" sql-type="float unsigned" precision="-1" not-null="true"/>
+        </property>
+        <property name="weightAttendance">
+            <column name="WeightAttendance" sql-type="float unsigned" precision="-1" not-null="true"/>
+        </property>
+        <one-to-one name="courseByCourse" class="Mapping.Course"/>
+    </class>
+</hibernate-mapping>

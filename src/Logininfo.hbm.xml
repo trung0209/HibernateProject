@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="Mapping.Logininfo" table="logininfo" schema="classmanagement">
+        <id name="loginId">
+            <column name="Login_ID" sql-type="varchar(20)" length="20"/>
+        </id>
+        <property name="password">
+            <column name="password" sql-type="varchar(45)" length="45"/>
+        </property>
+        <one-to-one name="professorByLoginId" class="Mapping.Professor"/>
+        <one-to-one name="studentByLoginId" class="Mapping.Student"/>
+    </class>
+</hibernate-mapping>

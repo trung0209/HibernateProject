@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:mysql://localhost:3306/classmanagement</property>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="connection.username">Trung</property>
+        <property name="connection.password">881995sj</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <mapping resource="Course.hbm.xml"/>
+        <mapping class="Mapping.Course"/>
+        <mapping resource="Department.hbm.xml"/>
+        <mapping class="Mapping.Department"/>
+        <mapping class="Mapping.Grade"/>
+        <mapping resource="Grade.hbm.xml"/>
+        <mapping class="Mapping.Logininfo"/>
+        <mapping resource="Logininfo.hbm.xml"/>
+        <mapping class="Mapping.Perquisite"/>
+        <mapping resource="Perquisite.hbm.xml"/>
+        <mapping class="Mapping.Professor"/>
+        <mapping resource="Professor.hbm.xml"/>
+        <mapping class="Mapping.Room"/>
+        <mapping resource="Room.hbm.xml"/>
+        <mapping class="Mapping.Section"/>
+        <mapping resource="Section.hbm.xml"/>
+        <mapping resource="Student.hbm.xml"/>
+        <mapping class="Mapping.Student"/>
+        <mapping class="Mapping.Studentlist"/>
+        <mapping resource="Studentlist.hbm.xml"/>
+        <mapping class="Mapping.Weight"/>
+        <mapping resource="Weight.hbm.xml"/>
+        <mapping class="Mapping.Locktable"/>
+        <mapping resource="Locktable.hbm.xml"/>
+
+
+        <!-- DB schema will be updated if needed -->
+    </session-factory>
+</hibernate-configuration>
