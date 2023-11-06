@@ -21,7 +21,6 @@
             <column name="Professor_ID"/>
         </many-to-one>
         <one-to-one name="weightById" class="Mapping.Weight"/>
-
         <set name="gradesById" inverse="true">
             <key>
                 <column name="Course_ID"/>
