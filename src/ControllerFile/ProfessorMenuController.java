@@ -13,11 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import memberclass.Classroom;
-import memberclass.Professor_GUI;
+import memberclass.ProfessorGUI;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
@@ -28,7 +27,7 @@ import java.util.*;
 
 
 public class ProfessorMenuController implements Initializable {
-    static Professor_GUI professorInfo;
+    private ProfessorGUI professorInfo;
 
     private ArrayList<Classroom> class_data;
 
@@ -56,6 +55,12 @@ public class ProfessorMenuController implements Initializable {
     @FXML
     private Button sectionBtn;
 
+    @FXML
+    private TableColumn<Classroom, String> listCol;
+
+    private static final String SERVER_HOST = "localhost";
+    private static final int SERVER_PORT = 8080;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -70,6 +75,7 @@ public class ProfessorMenuController implements Initializable {
             Classroom classroom = new Classroom(x.getId(), x.getCourseName(), String.valueOf(x.getCredit()));
             classroom.getDelete_btn().setOnAction(this::DeleteButton);
             classroom.getGrade_btn().setOnAction(this::GradeButton);
+            classroom.getButton2().setOnAction(this::StudentList);
             class_data.add(classroom);
         }
 
@@ -77,6 +83,7 @@ public class ProfessorMenuController implements Initializable {
         gradeCol.setCellValueFactory(new PropertyValueFactory<>("grade_btn"));
         idCol.setCellValueFactory(new PropertyValueFactory<>("class_ID"));
         creditCol.setCellValueFactory(new PropertyValueFactory<>("credit"));
+        listCol.setCellValueFactory(new PropertyValueFactory<>("button2"));
         creditCol.setCellFactory(TextFieldTableCell.forTableColumn());
         creditCol.setOnEditCommit(e -> {
             Classroom row = e.getTableView().getItems().get(e.getTablePosition().getRow());
@@ -116,13 +123,49 @@ public class ProfessorMenuController implements Initializable {
         totalClass.setText(String.valueOf(query.uniqueResult()));
         classTable.setItems(data);
         classTable.setEditable(true);
-        classTable.setOnMouseClicked(this::Show);
+//        classTable.setOnMouseClicked(this::Show);
         addButton.setOnAction(this::addClass);
         applyBtn.setOnAction(this::applyButton);
         backBtn.setOnAction(this::backBtn);
         sectionBtn.setOnAction(this::SectionButton);
         session.close();
 
+    }
+
+    public void setProfessorInfo(ProfessorGUI professorInfo) {
+        this.professorInfo = professorInfo;
+    }
+
+    private void StudentList(ActionEvent actionEvent) {
+        try {
+            Classroom classroom = classTable.getSelectionModel().getSelectedItem();
+            if (classroom == null) {
+                return;
+            }
+
+            Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../GUI/StudentList.fxml"));
+            // Map to controller manually
+
+            StudentListController controller = new StudentListController();
+            controller.setCourseID(classroom.getClass_ID());
+            controller.setProfessorID(professorInfo.getID());
+            loader.setController(controller);
+
+            // load Fxml
+            Parent gradeWindow = loader.load();
+            Stage newStage = new Stage();
+            newStage.initModality(Modality.APPLICATION_MODAL);
+
+            newStage.initOwner(currentStage);
+            newStage.setScene(new Scene(gradeWindow));
+            newStage.setResizable(false);
+            newStage.setTitle("Student List Window");
+            newStage.show();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 
     private String ID_generator() {
@@ -229,7 +272,7 @@ public class ProfessorMenuController implements Initializable {
             newStage.setTitle("Section Window");
             newStage.show();
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getCause());
         }
     }
 
@@ -296,12 +339,12 @@ public class ProfessorMenuController implements Initializable {
 //        }
     }
 
-    private void Show(MouseEvent mouseEvent) {
-        Classroom class_detail = classTable.getSelectionModel().getSelectedItem();
-        if (class_detail != null) {
-
-        }
-    }
+//    private void Show(MouseEvent mouseEvent) {
+//        Classroom class_detail = classTable.getSelectionModel().getSelectedItem();
+//        if (class_detail != null) {
+//
+//        }
+//    }
 
     private void backBtn(ActionEvent event) {
         Stage current = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import memberclass.CourseGUI;
-import memberclass.Student_GUI;
+import memberclass.StudentGUI;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CourseRegisterController implements Initializable {
-    static Student_GUI studentInfo;
+    private StudentGUI studentInfo;
     ArrayList<CourseGUI> list_course;
     ArrayList<CourseGUI> added_course;
     String previous;
@@ -73,7 +73,6 @@ public class CourseRegisterController implements Initializable {
 
     @FXML
     private TableColumn<CourseGUI, String> professorCol, professorCol1;
-
     @FXML
     private ComboBox<String> deptList;
 
@@ -93,21 +92,19 @@ public class CourseRegisterController implements Initializable {
             temp.add(object.toString());
         }
         ObservableList<String> depName = FXCollections.observableArrayList(temp);
-        idCol.setCellValueFactory(new PropertyValueFactory<>("class_id"));
+        idCol.setCellValueFactory(new PropertyValueFactory<>("classID"));
         professorCol.setCellValueFactory(new PropertyValueFactory<>("professor"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("className"));
         roomCol.setCellValueFactory(new PropertyValueFactory<>("room"));
         timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
         dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
         registerCol.setCellValueFactory(new PropertyValueFactory<>("button"));
-
         query = session.createNativeQuery("SELECT S.ID, S.Name, S.CourseName, S.Room, S.TimeRanges, S.Days\n" +
                 "FROM classmanagement.student_schedule as S\n" +
-                "where S.Department = ? and (S.ID,?) in (select course, student_ID from classmanagement.studentlist)");
-        query.setParameter(1, studentInfo.getDepartment());
-        query.setParameter(2, studentInfo.getID());
+                "where (S.ID,?) in (select course, student_ID from classmanagement.studentlist)");
+        query.setParameter(1, studentInfo.getID());
 
-        idCol1.setCellValueFactory(new PropertyValueFactory<>("class_id"));
+        idCol1.setCellValueFactory(new PropertyValueFactory<>("classID"));
         professorCol1.setCellValueFactory(new PropertyValueFactory<>("professor"));
         nameCol1.setCellValueFactory(new PropertyValueFactory<>("className"));
         roomCol1.setCellValueFactory(new PropertyValueFactory<>("room"));
@@ -131,6 +128,14 @@ public class CourseRegisterController implements Initializable {
         list_course = new ArrayList<>();
     }
 
+    public StudentGUI getStudentInfo() {
+        return studentInfo;
+    }
+
+    public void setStudentInfo(StudentGUI studentInfo) {
+        this.studentInfo = studentInfo;
+    }
+
     private void delete_course(ActionEvent actionEvent) {
         CourseGUI course = registerTable.getSelectionModel().getSelectedItem();
         if (course != null) {
@@ -138,7 +143,7 @@ public class CourseRegisterController implements Initializable {
             Session session = HibernateUtil.getSessionFactory().openSession();
             Transaction transaction = session.beginTransaction();
             NativeQuery query = session.createNativeQuery("DELETE FROM classmanagement.studentlist WHERE course = ? and student_ID = ?");
-            query.setParameter(1, course.getClass_id());
+            query.setParameter(1, course.getClassID());
             query.setParameter(2, studentInfo.getID());
             query.executeUpdate();
             transaction.commit();
@@ -152,9 +157,8 @@ public class CourseRegisterController implements Initializable {
         Session session = HibernateUtil.getSessionFactory().openSession();
         NativeQuery query = session.createNativeQuery("SELECT S.ID, S.Name, S.CourseName, S.Room, S.TimeRanges, S.Days\n" +
                 "FROM classmanagement.student_schedule as S\n" +
-                "where S.Department = ? and (S.ID,?) in (select course, student_ID from classmanagement.studentlist)");
-        query.setParameter(1, studentInfo.getDepartment());
-        query.setParameter(2, studentInfo.getID());
+                "where (S.ID,?) in (select course, student_ID from classmanagement.studentlist)");
+        query.setParameter(1, studentInfo.getID());
 
         List<Object[]> test = query.list();
         added_course = new ArrayList<>();
@@ -173,17 +177,18 @@ public class CourseRegisterController implements Initializable {
                 "where S.Department = ? and (S.ID,?) not in ( select * from classmanagement.studentlist)");
         query.setParameter(1, deptList.getValue());
         query.setParameter(2, studentInfo.getID());
-        test = query.list();
-
-        for (Object[] x : test) {
-            CourseGUI courseGUI = new CourseGUI(x[0].toString(), x[1].toString(), x[2].toString(),
-                    x[3].toString(), x[4].toString(), x[5].toString());
-            courseGUI.setButton(new Button("Register"));
-            courseGUI.getButton().setOnAction(this::add_course);
-            list_course.add(courseGUI);
+        if (deptList.getValue() != null) {
+            test = query.list();
+            for (Object[] x : test) {
+                CourseGUI courseGUI = new CourseGUI(x[0].toString(), x[1].toString(), x[2].toString(),
+                        x[3].toString(), x[4].toString(), x[5].toString());
+                courseGUI.setButton(new Button("Register"));
+                courseGUI.getButton().setOnAction(this::add_course);
+                list_course.add(courseGUI);
+            }
+            list1 = FXCollections.observableArrayList(list_course);
+            courseTable.setItems(list1);
         }
-        list1 = FXCollections.observableArrayList(list_course);
-        courseTable.setItems(list1);
     }
 
     private void add_course(ActionEvent actionEvent) {
@@ -193,7 +198,7 @@ public class CourseRegisterController implements Initializable {
             Session session = HibernateUtil.getSessionFactory().openSession();
             Transaction transaction = session.beginTransaction();
             NativeQuery query = session.createNativeQuery("INSERT INTO classmanagement.studentlist (course, student_ID) VALUES (?,?)");
-            query.setParameter(1, course.getClass_id());
+            query.setParameter(1, course.getClassID());
             query.setParameter(2, studentInfo.getID());
             query.executeUpdate();
             transaction.commit();
@@ -202,7 +207,7 @@ public class CourseRegisterController implements Initializable {
     }
 
     private void setSearchBtn(ActionEvent actionEvent) {
-        if (deptList.getValue().compareTo("Find your department") == 1) {
+        if (deptList.getValue().equals("Find your department")) {
             return;
         }
         list_course.clear();

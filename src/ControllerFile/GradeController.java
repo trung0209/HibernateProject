@@ -60,7 +60,7 @@ public class GradeController implements Initializable {
 //        midCol.setCelglValueFactory(new PropertyValueFactory<>("strin_mid"));
 //        midCol.setCellFactory(TextFieldTableCell.forTableColumn());
 //        midCol.setOnEditCommit(e->{
-//            Student_GUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
+//            StudentGUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
 //            row.setString_mid(e.getNewValue());
 //            try {
 //                row.setMidterm(Float.parseFloat(row.getString_mid()));
@@ -72,7 +72,7 @@ public class GradeController implements Initializable {
 //        finalCol.setCellValueFactory(new PropertyValueFactory<>("string_final"));
 //        finalCol.setCellFactory(TextFieldTableCell.forTableColumn());
 //        finalCol.setOnEditCommit(e-> {
-//            Student_GUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
+//            StudentGUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
 //            row.setString_final(e.getNewValue());
 //            try {
 //                row.setFinalterm(Float.parseFloat(row.getString_final()));
@@ -84,7 +84,7 @@ public class GradeController implements Initializable {
 //        assignCol.setCellValueFactory(new PropertyValueFactory<>("string_assign"));
 //        assignCol.setCellFactory(TextFieldTableCell.forTableColumn());
 //        assignCol.setOnEditCommit(e->{
-//            Student_GUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
+//            StudentGUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
 //            row.setString_assign(e.getNewValue());
 //            try {
 //                row.setAssignment(Float.parseFloat(row.getString_assign()));
@@ -96,7 +96,7 @@ public class GradeController implements Initializable {
 //        attendCol.setCellValueFactory(new PropertyValueFactory<>("string_attend"));
 //        attendCol.setCellFactory(TextFieldTableCell.forTableColumn());
 //        attendCol.setOnEditCommit(e->{
-//            Student_GUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
+//            StudentGUI row = e.getTableView().getItems().get(e.getTablePosition().getRow());
 //            row.setString_attend(e.getNewValue());
 //            try {
 //                row.setAttendance(Float.parseFloat(row.getString_attend()));
@@ -106,7 +106,7 @@ public class GradeController implements Initializable {
 //        });
 //
 //        gradeCol.setCellValueFactory(new PropertyValueFactory<>("string_average"));
-//        for (Student_GUI studentGUI : listStudentGUIS) {
+//        for (StudentGUI studentGUI : listStudentGUIS) {
 //            String grade_list= String.format("../ClassroomProject/Data/StudentDetails/%s/%s/grade.txt", studentGUI.getID(),classID);
 //            File file = new File(grade_list);
 //            try {
@@ -131,7 +131,7 @@ public class GradeController implements Initializable {
 //
 //        int i = 0;
 //
-//        ObservableList<Student_GUI> data = FXCollections.observableArrayList(listStudentGUIS);
+//        ObservableList<StudentGUI> data = FXCollections.observableArrayList(listStudentGUIS);
 //
 //        weightMiterm.setText(list_weight[0]);
 //        weightFinal.setText(list_weight[1]);
@@ -143,7 +143,7 @@ public class GradeController implements Initializable {
 //    }
 //
 //    public void ApplyChange(ActionEvent e) {
-//        ObservableList<Student_GUI> data = gradeTable.getItems();
+//        ObservableList<StudentGUI> data = gradeTable.getItems();
 //        try {
 //            float midweight = (float) (Float.parseFloat(weightMiterm.getText())/100.0);
 //            float finalweight = (float) (Float.parseFloat(weightFinal.getText())/100.0);
@@ -164,7 +164,7 @@ public class GradeController implements Initializable {
 //            status.setText("Total weight is 100%");
 //
 //
-//            for (Student_GUI x: data) {
+//            for (StudentGUI x: data) {
 //                float grade1 = x.getMidterm()*midweight + x.getFinalterm()*finalweight;
 //                float grade2 = x.getAssignment()*assignmentweight + x.getAttendance()*attendanceweight;
 //                x.setAverage(grade1+grade2);

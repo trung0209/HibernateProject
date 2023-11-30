@@ -1,19 +1,43 @@
 package memberclass;
 
+import javafx.scene.control.Button;
+
 import java.sql.Date;
 
-public class Student_GUI extends Person {
+public class StudentGUI extends Person {
     private String department;
     private String email;
     private String phone;
     private Date birthday;
+    private byte[] image;
+    private Button btn;
 
-    public Student_GUI(String name, String ID, String department, String email, String phone, Date birthday) {
+    public StudentGUI(String name, String ID, String department, String email, String phone, Date birthday, byte[] image) {
         super(name, ID);
         this.department = department;
         this.email = email;
         this.phone = phone;
         this.birthday = birthday;
+        this.image = image;
+    }
+
+    public StudentGUI(String name, String ID, String password) {
+        super(name, ID, password);
+        this.btn = new Button("Open Chat");
+    }
+
+    public StudentGUI(String name, String ID) {
+        super(name, ID);
+        this.btn = new Button("Open Chat");
+        this.btn.setPrefWidth(200);
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public String getDepartment() {
@@ -46,5 +70,9 @@ public class Student_GUI extends Person {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public Button getBtn() {
+        return btn;
     }
 }

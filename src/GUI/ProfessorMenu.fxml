@@ -27,7 +27,8 @@
                 <TableColumn fx:id="gradeCol" prefWidth="104.0" text="Grade"/>
                 <TableColumn fx:id="idCol" minWidth="0.0" prefWidth="89.0" text="Class ID"/>
                 <TableColumn fx:id="creditCol" prefWidth="104.0" text="Credit"/>
-                <TableColumn fx:id="nameCol" maxWidth="391.0" prefWidth="380.0" text="Class Name"/>
+                <TableColumn fx:id="listCol" prefWidth="94.0" text="List"/>
+                <TableColumn fx:id="nameCol" maxWidth="391.0" prefWidth="361.0" text="Class Name"/>
             </columns>
         </TableView>
         <VBox layoutX="47.0" layoutY="583.0" prefHeight="132.0" prefWidth="145.0" spacing="5.0">

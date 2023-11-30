@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import memberclass.Professor_GUI;
+import memberclass.ProfessorGUI;
 import memberclass.SectionGUI;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class SectionController implements Initializable {
-    static Professor_GUI professorInfo;
+    static ProfessorGUI professorInfo;
     private ArrayList<SectionGUI> sectionlist;
     @FXML
     private TableView<SectionGUI> ownSectionTable, otherSectionTable;
@@ -124,12 +124,44 @@ public class SectionController implements Initializable {
             sectionGUI.setDay(x[5].toString());
             sectionlist.add(sectionGUI);
         }
+
+
+        roomList.setOnAction(event -> {
+            otherSectionTable.getItems().clear();
+            NativeQuery query = session.createSQLQuery("select C.ID, C.CourseName, S.Room_name, S.start, S.end, S.Day\n" +
+                    "from classmanagement.course as C inner join classmanagement.section as S\n" +
+                    "where C.ID = S.courseid and S.Room_name = ?");
+            String current_room = roomList.getValue();
+            query.setParameter(1, current_room);
+            ArrayList<SectionGUI> sectionlist2 = new ArrayList<>();
+            if (current_room != null) {
+                List<Object[]> test2 = query.list();
+                for (Object[] x : test2) {
+                    SectionGUI sectionGUI = new SectionGUI();
+                    sectionGUI.setClass_id(x[0].toString());
+                    sectionGUI.setClassName(x[1].toString());
+                    sectionGUI.setRoom(x[2].toString());
+                    sectionGUI.setTime(x[3].toString() + "-" + x[4].toString());
+                    sectionGUI.setDay(x[5].toString());
+                    sectionlist2.add(sectionGUI);
+                }
+                ObservableList<SectionGUI> section_list2 = FXCollections.observableArrayList(sectionlist2);
+                otherSectionTable.getItems().addAll(section_list2);
+            }
+        });
+
         ObservableList<SectionGUI> section_list = FXCollections.observableArrayList(sectionlist);
         idCol.setCellValueFactory(new PropertyValueFactory<>("class_id"));
         nameCol.setCellValueFactory(new PropertyValueFactory<>("className"));
         roomCol.setCellValueFactory(new PropertyValueFactory<>("room"));
         timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
         dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+
+        idCol1.setCellValueFactory(new PropertyValueFactory<>("class_id"));
+        nameCol1.setCellValueFactory(new PropertyValueFactory<>("className"));
+        roomCol1.setCellValueFactory(new PropertyValueFactory<>("room"));
+        timeCol1.setCellValueFactory(new PropertyValueFactory<>("time"));
+        dayCol1.setCellValueFactory(new PropertyValueFactory<>("day"));
 
         ownSectionTable.getItems().addAll(section_list);
         applyBtn.setOnAction(this::Create_Section);

@@ -14,14 +14,20 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import memberclass.Professor_GUI;
-import memberclass.Student_GUI;
+import memberclass.ProfessorGUI;
+import memberclass.StudentGUI;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +36,8 @@ import java.util.ResourceBundle;
 
 
 public class LoginMenuController implements Initializable {
+    @FXML
+    private Label pic_path;
 
     @FXML
     private TextField IdField;
@@ -40,7 +48,7 @@ public class LoginMenuController implements Initializable {
     @FXML
     private Label StatusLable;
 
-    // Professor_GUI register Tab
+    // ProfessorGUI register Tab
     @FXML
     private TextField IdRegister;
 
@@ -56,7 +64,7 @@ public class LoginMenuController implements Initializable {
     @FXML
     private Label StatusLable2;
 
-    // Student_GUI register Tab
+    // StudentGUI register Tab
     @FXML
     private TextField StudentId;
 
@@ -92,6 +100,9 @@ public class LoginMenuController implements Initializable {
 
     @FXML
     private TextField dateInputStudent;
+
+    @FXML
+    private Button upload_btn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -155,22 +166,23 @@ public class LoginMenuController implements Initializable {
                 // load fxml
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../GUI/ProfessorMenu.fxml"));
                 // Map to controller manually
-                ProfessorMenuController.professorInfo = new Professor_GUI(test.getName(), test.getId(), test.getDepartmentId());
+                ProfessorGUI professorInfo = new ProfessorGUI(test.getName(), test.getId(), test.getDepartmentId());
                 ProfessorMenuController controller = new ProfessorMenuController();
+                controller.setProfessorInfo(professorInfo);
                 loader.setController(controller);
                 // load Fxml
                 Parent root = loader.load();
-                current.setTitle("Professor_GUI Page");
+                current.setTitle("ProfessorGUI Page");
                 current.setScene(new Scene(root));
                 current.setResizable(false);
                 current.setOnCloseRequest(event1 -> Platform.exit());
                 current.show();
             } catch (IOException e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
             }
             return;
         }
-        query = session.createNativeQuery("select P.ID, P.DepartmentID, P.Name, P.Email, P.Phone, P.birthday\n" +
+        query = session.createNativeQuery("select P.ID, P.DepartmentID, P.Name, P.Email, P.Phone, P.birthday, P.image, P.Semester\n" +
                 "from classmanagement.student as P\n" +
                 "where P.ID = (select L.Login_ID from classmanagement.logininfo as L where L.Login_ID = ? and L.password = ?)");
         query.setParameter(1, login_id);
@@ -186,20 +198,21 @@ public class LoginMenuController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../GUI/StudentMenu.fxml"));
                 // Map to controller manually
 
-                StudentController.studentInfo = new Student_GUI(list2.getName(), list2.getId(),
-                        list2.getDepartmentByStudent().getName(), list2.getEmail(), list2.getPhone(), list2.getBirthday());
+                StudentGUI studentInfo = new StudentGUI(list2.getName(), list2.getId(),
+                        list2.getDepartmentByStudent().getName(), list2.getEmail(), list2.getPhone(), list2.getBirthday(), list2.getImage());
 
                 StudentController controller = new StudentController();
+                controller.setStudentInfo(studentInfo);
                 loader.setController(controller);
                 // load Fxml
                 Parent root = loader.load();
-                current.setTitle("Student_GUI Page");
+                current.setTitle("StudentGUI Page");
                 current.setScene(new Scene(root));
                 current.setResizable(false);
                 current.setOnCloseRequest(event1 -> Platform.exit());
                 current.show();
             } catch (IOException e) {
-                System.out.println(e.getCause());
+                e.printStackTrace();
             }
             return;
         }
@@ -221,7 +234,7 @@ public class LoginMenuController implements Initializable {
             return;
         }
         if (!checklength) {
-            StatusLable2.setText("Status: ID invalid");
+            StatusLable3.setText("Status: ID invalid");
             return;
         }
         if (!matchPass) {
@@ -229,21 +242,31 @@ public class LoginMenuController implements Initializable {
             return;
         }
         Session session = HibernateUtil.getSessionFactory().openSession();
-
         NativeQuery findDeptID = session.createNativeQuery("select ID from classmanagement.department where Name = ?");
         findDeptID.setParameter(1, listDept1.getValue());
 
         Transaction transaction = null;
         try {
+            byte[] data = null;
+            try {
+                BufferedImage bImage = ImageIO.read(new File(pic_path.getText()));
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ImageIO.write(bImage, "jpg", bos);
+                data = bos.toByteArray();
+
+            } catch (IIOException ignored) {
+            }
+
             transaction = session.beginTransaction();
-            NativeQuery query = session.createNativeQuery("CALL classmanagement.insert_student(?,?,?,?,?,?,?)");
+            NativeQuery query = session.createNativeQuery("CALL classmanagement.insert_student(?,?,?,?,?,?,?,?)");
             query.setParameter(1, name);
             query.setParameter(2, ID);
             query.setParameter(3, password);
             query.setParameter(4, StudentEmail.getText());
             query.setParameter(5, StudentEmail.getText());
             query.setParameter(6, dateInputStudent.getText());
-            query.setParameter(7, findDeptID.uniqueResult());
+            query.setParameter(8, findDeptID.uniqueResult());
+            query.setParameter(7, data);
             query.executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
@@ -251,16 +274,23 @@ public class LoginMenuController implements Initializable {
                 transaction.rollback();
             }
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
         session.close();
 
         StatusLable3.setText("Success");
     }
 
     @FXML
-    public void RegisterProfessor() {
+    void upload(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(upload_btn.getScene().getWindow());
+        pic_path.setText(file.getPath());
+    }
 
+    @FXML
+    public void RegisterProfessor() {
         String name = NameRegister.getText();
         String ID = IdRegister.getText();
         String password = PasswordRegister.getText();

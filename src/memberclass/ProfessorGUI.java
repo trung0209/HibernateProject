@@ -2,12 +2,12 @@ package memberclass;
 
 import java.util.ArrayList;
 
-public class Professor_GUI extends Person {
+public class ProfessorGUI extends Person {
     protected ArrayList<Classroom> classrooms_List;
     private int total_class;
     private int dept_id;
 
-    public Professor_GUI(String name, String ID, int dept_id) {
+    public ProfessorGUI(String name, String ID, int dept_id) {
         super(name, ID);
         total_class = 0;
         this.dept_id = dept_id;

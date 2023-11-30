@@ -14,6 +14,9 @@ public class Student {
     private Grade gradeById;
     private Logininfo logininfoById;
     private Department departmentByStudent;
+    private int semester;
+    private int departmentId;
+    private byte[] image;
 
     @ManyToOne
     @JoinColumn(name = "DepartmentID", referencedColumnName = "ID", nullable = false)
@@ -112,4 +115,23 @@ public class Student {
         this.logininfoById = logininfoById;
     }
 
+    @Basic
+    @Column(name = "Semester", nullable = false)
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
+    }
+
+    @Basic
+    @Column(name = "image", nullable = true)
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 }

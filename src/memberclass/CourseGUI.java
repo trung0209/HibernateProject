@@ -3,17 +3,26 @@ package memberclass;
 import javafx.scene.control.Button;
 
 public class CourseGUI {
-    private String class_id;
+    private String classID;
     private String professor;
+    private String professorID;
     private String className;
     private String room;
     private String time;
     private String day;
     private Button button;
 
+    public CourseGUI(String classID, String className, String professor, String professorID) {
+        this.classID = classID;
+        this.professor = professor;
+        this.className = className;
+        this.professorID = professorID;
+        this.button = new Button("Open Chat");
+        button.setPrefWidth(200);
+    }
 
-    public CourseGUI(String class_id, String professor, String className, String room, String time, String day) {
-        this.class_id = class_id;
+    public CourseGUI(String classID, String professor, String className, String room, String time, String day) {
+        this.classID = classID;
         this.professor = professor;
         this.className = className;
         this.room = room;
@@ -21,6 +30,14 @@ public class CourseGUI {
         this.day = day;
         this.button = new Button();
         button.setPrefWidth(100);
+    }
+
+    public String getClassID() {
+        return classID;
+    }
+
+    public void setClassID(String classID) {
+        this.classID = classID;
     }
 
     public String getProfessor() {
@@ -31,12 +48,12 @@ public class CourseGUI {
         this.professor = professor;
     }
 
-    public String getClass_id() {
-        return class_id;
+    public String getProfessorID() {
+        return professorID;
     }
 
-    public void setClass_id(String class_id) {
-        this.class_id = class_id;
+    public void setProfessorID(String professorID) {
+        this.professorID = professorID;
     }
 
     public String getClassName() {

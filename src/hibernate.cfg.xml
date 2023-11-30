@@ -7,9 +7,9 @@
         <property name="connection.url">jdbc:mysql://localhost:3306/classmanagement</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="connection.username">Trung</property>
-        <property name="connection.password">881995sj</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">881995sj</property>
         <mapping resource="Course.hbm.xml"/>
         <mapping class="Mapping.Course"/>
         <mapping resource="Department.hbm.xml"/>

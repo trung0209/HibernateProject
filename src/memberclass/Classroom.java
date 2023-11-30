@@ -8,6 +8,7 @@ public class Classroom {
     private String credit;
     private Button grade_btn;
     private Button delete_btn;
+    private Button button2;
 
     public Classroom(String class_ID, String class_name, String credit) {
         this.class_ID = class_ID;
@@ -17,6 +18,16 @@ public class Classroom {
         grade_btn.setPrefWidth(100);
         this.delete_btn = new Button("Delete");
         delete_btn.setPrefWidth(100);
+        this.button2 = new Button("Student List");
+        button2.setPrefWidth(100);
+    }
+
+    public Button getButton2() {
+        return button2;
+    }
+
+    public void setButton2(Button button2) {
+        this.button2 = button2;
     }
 
     public String getCredit() {

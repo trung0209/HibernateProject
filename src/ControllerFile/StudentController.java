@@ -1,6 +1,7 @@
 package ControllerFile;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,21 +9,28 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import memberclass.GradeGUI;
-import memberclass.Student_GUI;
+import javafx.stage.WindowEvent;
+import memberclass.CourseGUI;
+import memberclass.StudentGUI;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class StudentController implements Initializable {
 
-    static Student_GUI studentInfo;
+    private StudentGUI studentInfo;
     @FXML
     private TextField id;
 
@@ -45,11 +53,20 @@ public class StudentController implements Initializable {
     private TextField birthday;
 
     @FXML
-    private TableView<GradeGUI> gradeTable;
+    private TableView<CourseGUI> courseListTable;
 
     @FXML
-    private TableColumn<GradeGUI, String> idCol, nameCol,
-            midCol, finalCol, assignCol, attendCol, gradeCol;
+    private TableColumn<CourseGUI, String> idCol;
+
+    @FXML
+    private TableColumn<CourseGUI, String> nameCol;
+
+    @FXML
+    private TableColumn<CourseGUI, String> proNameCol;
+
+    @FXML
+    private TableColumn<CourseGUI, String> chatCol;
+
 
     @FXML
     private Button signout;
@@ -60,6 +77,9 @@ public class StudentController implements Initializable {
     @FXML
     private Button registerBtn;
 
+    @FXML
+    private ImageView pictureView;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         id.setText(studentInfo.getID());
@@ -68,17 +88,41 @@ public class StudentController implements Initializable {
         birthday.setText(String.valueOf(studentInfo.getBirthday()));
         email.setText(studentInfo.getEmail());
         phone.setText(studentInfo.getPhone());
+        if (studentInfo.getImage() != null) {
+            ByteArrayInputStream is = new ByteArrayInputStream(studentInfo.getImage());
+            pictureView.setImage(new Image(is));
+        }
 
-//        idCol.setCellValueFactory(new PropertyValueFactory<>("classID"));
-//        nameCol.setCellValueFactory(new PropertyValueFactory<>("className"));
-//        midCol.setCellValueFactory(new PropertyValueFactory<>("string_mid"));
-//        finalCol.setCellValueFactory(new PropertyValueFactory<>("string_final"));
-//        assignCol.setCellValueFactory(new PropertyValueFactory<>("string_assign"));
-//        attendCol.setCellValueFactory(new PropertyValueFactory<>("string_attend"));
-//        gradeCol.setCellValueFactory(new PropertyValueFactory<>("string_average"));
+        loadTable();
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("classID"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("className"));
+        proNameCol.setCellValueFactory(new PropertyValueFactory<>("professor"));
+        chatCol.setCellValueFactory(new PropertyValueFactory<>("button"));
+
         signout.setOnAction(this::backBtn);
         updateBtn.setOnAction(this::update_info);
         registerBtn.setOnAction(this::register);
+    }
+
+    private void loadTable() {
+        courseListTable.getItems().clear();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        NativeQuery query = session.createNativeQuery("select C.ID,C.CourseName,P.Name,C.Professor_ID from classmanagement.studentlist as T, classmanagement.course as C, classmanagement.professor as P\n" +
+                "where T.course = C.ID and T.student_ID = ? and P.ID = C.Professor_ID");
+        query.setParameter(1, studentInfo.getID());
+
+        List<Object[]> test = query.list();
+        ArrayList<CourseGUI> courseList = new ArrayList<>();
+        for (Object[] x : test) {
+            if (x[1] == null) {
+                continue;
+            }
+            CourseGUI course = new CourseGUI(x[0].toString(), x[1].toString(), x[2].toString(), x[3].toString());
+            course.getButton().setOnAction(this::openChat);
+            courseList.add(course);
+        }
+        courseListTable.getItems().addAll(courseList);
     }
 
     private void update_info(ActionEvent actionEvent) {
@@ -97,6 +141,10 @@ public class StudentController implements Initializable {
         query.executeUpdate();
         transaction.commit();
         status.setText("Success");
+    }
+
+    public void setStudentInfo(StudentGUI studentInfo) {
+        this.studentInfo = studentInfo;
     }
 
     private void backBtn(ActionEvent event) {
@@ -119,21 +167,60 @@ public class StudentController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../GUI/StudentCourse.fxml"));
             // Map to controller manually
-            CourseRegisterController.studentInfo = studentInfo;
-            CourseRegisterController controller = new CourseRegisterController();
+            StudentGUI studentInfo = this.studentInfo;
 
+            CourseRegisterController controller = new CourseRegisterController();
+            controller.setStudentInfo(studentInfo);
             loader.setController(controller);
 
             // load Fxml
             Parent gradeWindow = loader.load();
             Stage newStage = new Stage();
             newStage.initModality(Modality.APPLICATION_MODAL);
-
+            newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    loadTable();
+                }
+            });
             newStage.initOwner(currentStage);
             newStage.setScene(new Scene(gradeWindow));
             newStage.setResizable(false);
             newStage.setTitle("Course Register Window");
             newStage.show();
+
+
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    private void openChat(ActionEvent actionEvent) {
+        try {
+            CourseGUI course = courseListTable.getSelectionModel().getSelectedItem();
+            if (course == null) {
+                return;
+            }
+            Stage currentStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../GUI/MessageMenu.fxml"));
+            // Map to controller manually
+            MessageController controller = new MessageController();
+            controller.setUserID(studentInfo.getID());
+
+            controller.setTargetID(course.getProfessorID());
+            loader.setController(controller);
+
+            // load Fxml
+            Parent gradeWindow = loader.load();
+            Stage newStage = new Stage();
+            newStage.initModality(Modality.NONE);
+            newStage.initOwner(currentStage);
+            newStage.setScene(new Scene(gradeWindow));
+            newStage.setResizable(false);
+            newStage.setTitle("Message Window");
+            newStage.show();
+
         } catch (IOException e) {
             System.out.println(e);
         }

@@ -216,14 +216,21 @@
                                 <Font size="20.0"/>
                             </font>
                         </TextField>
-                        <Label fx:id="StatusLable3" alignment="CENTER" layoutX="524.0" layoutY="110.0" prefHeight="51.0"
+                        <Label fx:id="StatusLable3" alignment="CENTER" layoutX="516.0" layoutY="308.0" prefHeight="51.0"
                                prefWidth="357.0">
                             <font>
                                 <Font size="23.0"/>
                             </font>
                         </Label>
-                        <Button layoutX="643.0" layoutY="174.0" mnemonicParsing="false" onAction="#RegisterStudent"
-                                prefHeight="30.0" prefWidth="120.0" text="Register"/>
+                        <Button layoutX="524.0" layoutY="236.0" mnemonicParsing="false" onAction="#RegisterStudent"
+                                prefHeight="31.0" prefWidth="150.0" text="Register"/>
+                        <Button fx:id="upload_btn" layoutX="524.0" layoutY="174.0" mnemonicParsing="false"
+                                onAction="#upload" prefHeight="31.0" prefWidth="151.0" text="Upload picture"/>
+                        <Label fx:id="pic_path" layoutX="524.0" layoutY="121.0" prefHeight="30.0" prefWidth="189.0">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Label>
                     </children>
                 </AnchorPane>
             </content>
